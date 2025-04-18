@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EtudiantModule } from './etudiant/etudiant.module';
 import { EnseignantModule } from './enseignant/enseignant.module';
 import { AdministrateurModule } from './administrateur/administrateur.module';
@@ -20,12 +20,25 @@ import { Note } from './notes/notes.entity';
 import { Schedule } from './schedules/schedules.entity';
 import { Section } from './section/section.entity';
 import { User } from './user.entity';
+import { ChangeRequest } from './change-request/change-request.entity';
+import { Groupe } from './groupe/groupe.entity';
+import { GroupeModule } from './groupe/groupe.module';
+import { ChangeRequestModule } from './change-request/change-request.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '60s' },
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
@@ -41,6 +54,8 @@ import { User } from './user.entity';
         Schedule,
         Section,
         User,
+        ChangeRequest,
+        Groupe
       ],
       synchronize: true,
       ssl: { rejectUnauthorized: false },
@@ -55,6 +70,8 @@ import { User } from './user.entity';
       Schedule,
       Section,
       User,
+      ChangeRequest,
+      Groupe
     ]),
     EtudiantModule,
     EnseignantModule,
@@ -65,7 +82,9 @@ import { User } from './user.entity';
     SchedulesModule,
     SectionModule,
     AuthModule,
+    GroupeModule,
+    ChangeRequestModule
   ],
   controllers: [SectionController],
 })
-export class AppModule {}
+export class AppModule { }
