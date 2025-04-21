@@ -4,10 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EtudiantModule } from './etudiant/etudiant.module';
 import { EnseignantModule } from './enseignant/enseignant.module';
 import { AdministrateurModule } from './administrateur/administrateur.module';
-import { DepartmentsModule } from './departments/departments.module';
-import { ModulesModule } from './modules/modules.module';
-import { NotesModule } from './notes/notes.module';
-import { SchedulesModule } from './schedules/schedules.module';
+import { DepartmentModule } from './departments/departments.module';
 import { SectionModule } from './section/section.module';
 import { AuthModule } from './auth/auth.module';
 import { SectionController } from './section/section.controller';
@@ -25,6 +22,9 @@ import { Groupe } from './groupe/groupe.entity';
 import { GroupeModule } from './groupe/groupe.module';
 import { ChangeRequestModule } from './change-request/change-request.module';
 import { JwtModule } from '@nestjs/jwt';
+import { StudyModuleModule } from './modules/modules.module';
+import { ScheduleModule } from './schedules/schedules.module';
+import { NoteModule } from './notes/notes.module';
 
 @Module({
   imports: [
@@ -76,10 +76,10 @@ import { JwtModule } from '@nestjs/jwt';
     EtudiantModule,
     EnseignantModule,
     AdministrateurModule,
-    DepartmentsModule,
-    ModulesModule,
-    NotesModule,
-    SchedulesModule,
+    DepartmentModule,
+    StudyModuleModule,
+    NoteModule,
+    ScheduleModule,
     SectionModule,
     AuthModule,
     GroupeModule,
